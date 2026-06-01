@@ -4,231 +4,288 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Adijaya Photography')</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    {{-- AOS Animation --}}
-<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <style>
-        
-        :root {
-            --gold: #C9A84C;
-            --gold-light: #E2C97E;
-            --gold-dark: #A07830;
-            --dark: #0D0D0D;
-            --dark-2: #1A1A1A;
-            --dark-3: #262626;
-        }
-        body { background-color: var(--dark); color: #f5f5f5; }
-        .gold { color: var(--gold); }
-        .bg-gold { background-color: var(--gold); }
-        .border-gold { border-color: var(--gold); }
-        .btn-gold {
-            background-color: var(--gold);
-            color: #0D0D0D;
-            font-weight: 700;
-            transition: all 0.3s;
-        }
-        .btn-gold:hover { background-color: var(--gold-light); }
-        .btn-outline-gold {
-            border: 2px solid var(--gold);
-            color: var(--gold);
-            font-weight: 700;
-            transition: all 0.3s;
-        }
-        .btn-outline-gold:hover {
-            background-color: var(--gold);
-            color: #0D0D0D;
-        }
-        .card-dark {
-            background-color: var(--dark-2);
-            border: 1px solid var(--dark-3);
-        }
-        .nav-link { transition: color 0.3s; }
-        .nav-link:hover { color: var(--gold) !important; }
-        html {
-    scroll-behavior: smooth;
-}
-
-/* Navbar transition */
-nav {
-    transition: box-shadow 0.3s ease;
-}
-
-/* Card hover effect */
-.card-dark {
-    transition: transform 0.3s ease, border-color 0.3s ease;
-}
-.card-dark:hover {
-    transform: translateY(-4px);
-    border-color: #C9A84C55 !important;
-}
-    </style>
     @stack('styles')
 </head>
-<body class="min-h-screen flex flex-col">
+<body>
 
-    {{-- NAVBAR --}}
-    <nav style="background-color: #0D0D0D; border-bottom: 1px solid #C9A84C33;"
-         class="sticky top-0 z-50 px-6 py-4">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            {{-- Logo --}}
-            <a href="{{ route('home') }}" class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-gold flex items-center justify-center"
-                     style="background-color: #C9A84C;">
-                    <span class="text-black font-bold text-lg">A</span>
-                </div>
-                <div>
-                    <span class="text-white font-bold text-lg">ADIJAYA</span>
-                    <span class="gold font-bold text-lg"> PHOTOGRAPHY</span>
-                </div>
-            </a>
+{{-- ================================ --}}
+{{-- CUSTOM CURSOR                    --}}
+{{-- ================================ --}}
+<div id="cursor"></div>
+<div id="cursorDot"></div>
 
-            {{-- Menu --}}
-            <div class="hidden md:flex items-center gap-8">
-                <a href="{{ route('home') }}"
-                   class="nav-link text-gray-300 text-sm font-medium">Beranda</a>
-                <a href="{{ route('home') }}#packages"
-                   class="nav-link text-gray-300 text-sm font-medium">Paket</a>
-                <a href="{{ route('home') }}#portfolio"
-                   class="nav-link text-gray-300 text-sm font-medium">Portofolio</a>
-                <a href="{{ route('home') }}#testimonials"
-                   class="nav-link text-gray-300 text-sm font-medium">Testimoni</a>
-                <a href="{{ route('booking.check') }}"
-                   class="nav-link text-gray-300 text-sm font-medium">Cek Booking</a>
-                <a href="{{ route('booking.create') }}"
-                   class="btn-gold px-5 py-2 rounded-full text-sm">
-                    Booking Sekarang
-                </a>
-            </div>
+{{-- ================================ --}}
+{{-- LOADING SCREEN                   --}}
+{{-- ================================ --}}
+<div id="loader">
+    <div id="loaderShutter"></div>
 
-            {{-- Mobile Menu Button --}}
-            <button id="mobileMenuBtn" class="md:hidden text-white">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M4 6h16M4 12h16M4 18h16"/>
-                </svg>
-            </button>
+    {{-- Logo --}}
+    <div class="relative z-10 text-center">
+        <div style="font-size: 0.7rem; letter-spacing: 0.3em; color: #555; margin-bottom: 2rem; text-transform: uppercase;">
+            Loading
         </div>
 
-        {{-- Mobile Menu --}}
-        <div id="mobileMenu" class="hidden md:hidden mt-4 pb-2 flex flex-col gap-3">
-            <a href="{{ route('home') }}" class="text-gray-300 text-sm py-2">Beranda</a>
-            <a href="{{ route('home') }}#packages" class="text-gray-300 text-sm py-2">Paket</a>
-            <a href="{{ route('home') }}#portfolio" class="text-gray-300 text-sm py-2">Portofolio</a>
-            <a href="{{ route('home') }}#testimonials" class="text-gray-300 text-sm py-2">Testimoni</a>
-            <a href="{{ route('booking.check') }}" class="text-gray-300 text-sm py-2">Cek Booking</a>
-            <a href="{{ route('booking.create') }}" class="btn-gold px-5 py-2 rounded-full text-sm text-center">
-                Booking Sekarang
-            </a>
+        {{-- Aperture SVG --}}
+        <div style="width: 80px; height: 80px; margin: 0 auto 2rem;">
+            <svg viewBox="0 0 100 100" style="width: 100%; animation: spin 4s linear infinite;">
+                <circle cx="50" cy="50" r="45" fill="none" stroke="#2A2A2A" stroke-width="1"/>
+                <circle cx="50" cy="50" r="45" fill="none" stroke="#F5F5F5" stroke-width="1"
+                        stroke-dasharray="70 212" stroke-linecap="round"/>
+                <circle cx="50" cy="50" r="6" fill="#F5F5F5"/>
+            </svg>
         </div>
-    </nav>
 
-    {{-- FLASH MESSAGE --}}
-    @if(session('success'))
-    <div class="max-w-7xl mx-auto w-full px-6 mt-4">
-        <div class="bg-green-900 border border-green-600 text-green-300 px-4 py-3 rounded-lg flex justify-between items-center">
-            <span>{{ session('success') }}</span>
-            <button onclick="this.parentElement.remove()" class="text-green-300 hover:text-white">✕</button>
+        <div style="font-size: 2.5rem; font-weight: 800; letter-spacing: -0.04em; color: #F5F5F5;">
+            ADIJAYA
+        </div>
+        <div style="font-size: 0.7rem; letter-spacing: 0.25em; color: #555; margin-top: 0.5rem; text-transform: uppercase;">
+            Photography
+        </div>
+
+        {{-- Counter --}}
+        <div style="margin-top: 3rem; font-size: 0.75rem; color: #333; letter-spacing: 0.1em;">
+            <span id="loaderCounter">0</span>%
         </div>
     </div>
-    @endif
+</div>
 
-    @if(session('error'))
-    <div class="max-w-7xl mx-auto w-full px-6 mt-4">
-        <div class="bg-red-900 border border-red-600 text-red-300 px-4 py-3 rounded-lg flex justify-between items-center">
-            <span>{{ session('error') }}</span>
-            <button onclick="this.parentElement.remove()" class="text-red-300 hover:text-white">✕</button>
+<style>
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+</style>
+
+{{-- ================================ --}}
+{{-- NAVBAR                           --}}
+{{-- ================================ --}}
+<nav class="navbar" id="navbar">
+    {{-- Logo --}}
+    <a href="{{ route('home') }}" style="text-decoration: none; display: flex; align-items: center; gap: 1rem;">
+        <div style="width: 36px; height: 36px; border: 1px solid #2A2A2A; border-radius: 50%;
+                    display: flex; align-items: center; justify-content: center;">
+            <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: #F5F5F5; stroke-width: 1.5;">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M6.343 6.343a8 8 0 1 0 11.314 11.314A8 8 0 0 0 6.343 6.343z"
+                      stroke-dasharray="4 2"/>
+            </svg>
+        </div>
+        <div>
+            <div style="font-size: 0.85rem; font-weight: 700; letter-spacing: 0.1em; color: #F5F5F5;">
+                ADIJAYA
+            </div>
+            <div style="font-size: 0.6rem; letter-spacing: 0.2em; color: #555; margin-top: -2px;">
+                PHOTOGRAPHY
+            </div>
+        </div>
+    </a>
+
+    {{-- Menu Desktop --}}
+    <div style="display: flex; align-items: center; gap: 2.5rem;" class="nav-menu-desktop">
+        <a href="{{ route('home') }}#packages" class="nav-link-item">Paket</a>
+        <a href="{{ route('home') }}#portfolio" class="nav-link-item">Portofolio</a>
+        <a href="{{ route('home') }}#testimonials" class="nav-link-item">Testimoni</a>
+        <a href="{{ route('booking.check') }}" class="nav-link-item">Cek Booking</a>
+        <a href="{{ route('booking.create') }}" class="btn-primary" data-magnetic
+           style="padding: 0.6rem 1.5rem; font-size: 0.8rem;">
+            Booking
+            <svg viewBox="0 0 16 16" style="width: 14px; height: 14px; fill: none;
+                 stroke: currentColor; stroke-width: 1.5;">
+                <path d="M3 8h10M9 4l4 4-4 4"/>
+            </svg>
+        </a>
+    </div>
+
+    {{-- Hamburger Mobile --}}
+    <button id="menuToggle" style="display: none; flex-direction: column; gap: 5px;
+            background: none; border: none; cursor: none; padding: 4px;">
+        <span class="menu-bar" style="width: 24px; height: 1px; background: #F5F5F5; transition: all 0.3s;"></span>
+        <span class="menu-bar" style="width: 16px; height: 1px; background: #F5F5F5; transition: all 0.3s;"></span>
+    </button>
+</nav>
+
+{{-- Mobile Menu --}}
+<div id="mobileMenu" style="position: fixed; inset: 0; background: #0A0A0A; z-index: 99;
+     display: flex; flex-direction: column; justify-content: center; padding: 3rem;
+     transform: translateY(-100%); transition: transform 0.5s cubic-bezier(0.76,0,0.24,1);">
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <a href="{{ route('home') }}#packages" class="mobile-nav-link">Paket</a>
+        <a href="{{ route('home') }}#portfolio" class="mobile-nav-link">Portofolio</a>
+        <a href="{{ route('home') }}#testimonials" class="mobile-nav-link">Testimoni</a>
+        <a href="{{ route('booking.check') }}" class="mobile-nav-link">Cek Booking</a>
+    </div>
+    <div style="margin-top: 3rem; border-top: 1px solid #1C1C1C; padding-top: 2rem;">
+        <a href="{{ route('booking.create') }}" class="btn-secondary"
+           style="display: inline-flex;">Booking Sekarang →</a>
+    </div>
+</div>
+
+<style>
+.nav-link-item {
+    font-size: 0.8rem;
+    color: #A0A0A0;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: color 0.3s;
+}
+.nav-link-item:hover { color: #F5F5F5; }
+
+.mobile-nav-link {
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 700;
+    color: #F5F5F5;
+    text-decoration: none;
+    letter-spacing: -0.03em;
+    transition: color 0.3s;
+    display: block;
+}
+.mobile-nav-link:hover { color: #555; }
+
+@media (max-width: 768px) {
+    .nav-menu-desktop { display: none !important; }
+    #menuToggle { display: flex !important; }
+}
+</style>
+
+{{-- ================================ --}}
+{{-- FLASH MESSAGES                   --}}
+{{-- ================================ --}}
+@if(session('success'))
+<div id="flashMsg" style="position: fixed; bottom: 2rem; right: 2rem; z-index: 200;
+     background: #1C1C1C; border: 1px solid #2A2A2A; border-radius: 12px;
+     padding: 1rem 1.5rem; display: flex; align-items: center; gap: 1rem;
+     font-size: 0.875rem; color: #F5F5F5; box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
+    <span style="color: #6ee7b7;">✓</span>
+    {{ session('success') }}
+    <button onclick="document.getElementById('flashMsg').remove()"
+            style="background: none; border: none; color: #555; cursor: none; margin-left: 0.5rem;">✕</button>
+</div>
+@endif
+
+@if(session('error'))
+<div id="flashMsg" style="position: fixed; bottom: 2rem; right: 2rem; z-index: 200;
+     background: #1C1C1C; border: 1px solid #2A2A2A; border-radius: 12px;
+     padding: 1rem 1.5rem; display: flex; align-items: center; gap: 1rem;
+     font-size: 0.875rem; color: #F5F5F5;">
+    <span style="color: #fca5a5;">✕</span>
+    {{ session('error') }}
+    <button onclick="document.getElementById('flashMsg').remove()"
+            style="background: none; border: none; color: #555; cursor: none; margin-left: 0.5rem;">✕</button>
+</div>
+@endif
+
+{{-- ================================ --}}
+{{-- MAIN CONTENT                     --}}
+{{-- ================================ --}}
+<main>
+    @yield('content')
+</main>
+
+{{-- ================================ --}}
+{{-- FOOTER                           --}}
+{{-- ================================ --}}
+<footer style="border-top: 1px solid #1C1C1C; padding: 4rem 0 2rem;">
+    <div class="container-main">
+        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4rem; margin-bottom: 4rem;">
+
+            <div>
+                <div style="font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em;
+                            color: #F5F5F5; margin-bottom: 1rem;">
+                    ADIJAYA<br>PHOTOGRAPHY
+                </div>
+                <p style="color: #555; font-size: 0.875rem; line-height: 1.7; max-width: 280px;">
+                    Mengabadikan setiap momen berharga dengan sentuhan artistik profesional.
+                </p>
+            </div>
+
+            <div>
+                <div class="text-label" style="margin-bottom: 1.5rem;">Layanan</div>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <a href="#" style="color: #555; font-size: 0.875rem; text-decoration: none;
+                                      transition: color 0.3s;" onmouseover="this.style.color='#F5F5F5'"
+                       onmouseout="this.style.color='#555'">Foto Wisuda</a>
+                    <a href="#" style="color: #555; font-size: 0.875rem; text-decoration: none;
+                                      transition: color 0.3s;" onmouseover="this.style.color='#F5F5F5'"
+                       onmouseout="this.style.color='#555'">Pre-Wedding</a>
+                    <a href="#" style="color: #555; font-size: 0.875rem; text-decoration: none;
+                                      transition: color 0.3s;" onmouseover="this.style.color='#F5F5F5'"
+                       onmouseout="this.style.color='#555'">Wedding</a>
+                    <a href="#" style="color: #555; font-size: 0.875rem; text-decoration: none;
+                                      transition: color 0.3s;" onmouseover="this.style.color='#F5F5F5'"
+                       onmouseout="this.style.color='#555'">Maternity</a>
+                </div>
+            </div>
+
+            <div>
+                <div class="text-label" style="margin-bottom: 1.5rem;">Kontak</div>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <span style="color: #555; font-size: 0.875rem;">📍 Lokasi Studio</span>
+                    <span style="color: #555; font-size: 0.875rem;">📱 08xx-xxxx-xxxx</span>
+                    <span style="color: #555; font-size: 0.875rem;">📧 adijaya@email.com</span>
+                    <span style="color: #555; font-size: 0.875rem;">📸 @adijayaphoto</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="border-top: 1px solid #1C1C1C; padding-top: 2rem;
+                    display: flex; justify-content: space-between; align-items: center;">
+            <span style="color: #333; font-size: 0.8rem;">
+                © {{ date('Y') }} Adijaya Photography
+            </span>
+            <a href="{{ route('login') }}"
+               style="color: #333; font-size: 0.75rem; text-decoration: none;
+                      letter-spacing: 0.1em; transition: color 0.3s;"
+               onmouseover="this.style.color='#555'"
+               onmouseout="this.style.color='#333'">
+                ADMIN
+            </a>
         </div>
     </div>
-    @endif
+</footer>
 
-    {{-- CONTENT --}}
-    <main class="flex-1">
-        @yield('content')
-    </main>
+@stack('scripts')
 
-    {{-- FOOTER --}}
-    <footer style="background-color: #0D0D0D; border-top: 1px solid #C9A84C33;" class="mt-20 py-12 px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center"
-                             style="background-color: #C9A84C;">
-                            <span class="text-black font-bold text-lg">A</span>
-                        </div>
-                        <div>
-                            <span class="text-white font-bold">ADIJAYA</span>
-                            <span class="gold font-bold"> PHOTOGRAPHY</span>
-                        </div>
-                    </div>
-                    <p class="text-gray-400 text-sm leading-relaxed">
-                        Mengabadikan momen berharga dalam setiap jepretan dengan sentuhan artistik profesional.
-                    </p>
-                </div>
-                <div>
-                    <h4 class="gold font-semibold mb-4">Layanan</h4>
-                    <ul class="space-y-2 text-gray-400 text-sm">
-                        <li>Foto Wisuda</li>
-                        <li>Foto Pre-Wedding</li>
-                        <li>Foto Wedding</li>
-                        <li>Foto Maternity</li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="gold font-semibold mb-4">Kontak</h4>
-                    <ul class="space-y-2 text-gray-400 text-sm">
-                        <li>📍 Lokasi Studio</li>
-                        <li>📱 WhatsApp: 08xx-xxxx-xxxx</li>
-                        <li>📧 adijaya@email.com</li>
-                        <li>📸 Instagram: @adijayaphoto</li>
-                    </ul>
-                </div>
-            </div>
-            <div style="border-top: 1px solid #C9A84C33;" class="mt-8 pt-6 text-center text-gray-500 text-sm">
-                © {{ date('Y') }} Adijaya Photography. All rights reserved.
-            </div>
-        </div>
-    </footer>
-
-    
-    <script>
-        // Mobile menu toggle
-        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
-            document.getElementById('mobileMenu').classList.toggle('hidden');
-        });
-    </script>
-
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
-    // Init AOS
-    AOS.init({
-        duration: 800,
-        easing: 'ease-in-out',
-        once: true,
-        offset: 80,
-    });
+// Navbar scroll effect
+window.addEventListener('scroll', () => {
+    const navbar = document.getElementById('navbar');
+    if (window.scrollY > 80) {
+        navbar.classList.add('scrolled');
+    } else {
+        navbar.classList.remove('scrolled');
+    }
+});
 
-    // Smooth scroll untuk anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        });
-    });
+// Mobile menu toggle
+const menuToggle = document.getElementById('menuToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+let menuOpen = false;
 
-    // Navbar shadow on scroll
-    window.addEventListener('scroll', function() {
-        const nav = document.querySelector('nav');
-        if (window.scrollY > 50) {
-            nav.style.boxShadow = '0 4px 30px rgba(201, 168, 76, 0.1)';
+if (menuToggle) {
+    menuToggle.addEventListener('click', () => {
+        menuOpen = !menuOpen;
+        mobileMenu.style.transform = menuOpen ? 'translateY(0)' : 'translateY(-100%)';
+        const bars = menuToggle.querySelectorAll('.menu-bar');
+        if (menuOpen) {
+            bars[0].style.transform = 'rotate(45deg) translate(4px, 4px)';
+            bars[1].style.opacity = '0';
         } else {
-            nav.style.boxShadow = 'none';
+            bars[0].style.transform = 'none';
+            bars[1].style.opacity = '1';
         }
     });
+}
+
+// Auto hide flash message
+setTimeout(() => {
+    const flash = document.getElementById('flashMsg');
+    if (flash) flash.remove();
+}, 4000);
 </script>
-    @stack('scripts')
+
 </body>
 </html>

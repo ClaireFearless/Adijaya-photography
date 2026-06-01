@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ManageBookingController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ReviewController;
 
+
 // =====================
 // PUBLIC ROUTES (Klien)
 // =====================
@@ -19,9 +20,16 @@ Route::get('/booking/success/{booking_code}', [BookingController::class, 'succes
 Route::get('/booking/check', [BookingController::class, 'check'])->name('booking.check');
 Route::post('/booking/check', [BookingController::class, 'checkStatus'])->name('booking.checkStatus');
 Route::get('/booking/payment/{booking_code}', [BookingController::class, 'payment'])->name('booking.payment');
+Route::post('/payment/process', [PaymentController::class, 'process'])->name('payment.process');
 
 
 
+// Midtrans Webhook
+Route::post('/payment/webhook', [PaymentController::class, 'webhook'])
+     ->name('payment.webhook');
+
+
+     
 // =====================
 // AUTH ROUTES
 // =====================
